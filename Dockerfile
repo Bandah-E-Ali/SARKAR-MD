@@ -1,19 +1,16 @@
 FROM node:lts-buster
 
-RUN apt-get update && \
-  apt-get install -y \
-  ffmpeg \
-  imagemagick \
-  webp && \
-  apt-get upgrade -y && \
-  rm -rf /var/lib/apt/lists/*
+# Set working directory
+WORKDIR /app
 
-COPY package.json .
-
-RUN npm install && npm install qrcode-terminal
-
+# Copy all local files to container
 COPY . .
 
-EXPOSE 5000
+# Install dependencies
+RUN npm install && npm install -g pm2
 
+# Expose the port your app listens on
+EXPOSE 5050
+
+# Start the app
 CMD ["npm", "start"]
